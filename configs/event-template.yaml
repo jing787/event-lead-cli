@@ -1,0 +1,58 @@
+event:
+  name: "Your Event Name"
+  date: "2026-06-15"
+  location: "Your City"
+
+# Path is relative to this config file.
+data_dir: "../data"
+
+sources:
+  google_form:
+    file: "form-export.csv"
+    type: csv
+    encoding: utf-8
+    mapping:
+      timestamp: "Timestamp"
+      name: "Full Name"
+      company_title: "Company + Title"
+      email: "Email Address"
+    survey_fields:
+      interest_scenario: "Interested AI use cases"
+      demo_interest: "Would you like a product demo?"
+      project_timeline: "Estimated project timeline"
+      additional_topics: "Additional topics of interest"
+    attendance_status: attended
+
+dedup:
+  email_exact: true
+  fuzzy_threshold: 85
+
+scoring:
+  dimensions:
+    - id: company_fit
+      label: Company fit
+      description: >
+        How well the company profile matches Dify ICP.
+        Mid/large enterprises with IT teams score higher than very small businesses.
+      weight: 0.25
+    - id: seniority_match
+      label: Seniority match
+      description: >
+        Whether this contact has budget ownership or procurement influence.
+        Decision-makers and department heads score higher.
+      weight: 0.25
+    - id: engagement_signal
+      label: Engagement signal
+      description: >
+        How strong the follow-up intent is.
+        Explicit demo requests and clear near-term timelines score higher.
+      weight: 0.35
+    - id: interest_alignment
+      label: Interest alignment
+      description: >
+        How closely the stated use cases map to Dify core capabilities.
+        Workflow automation, knowledge assistant, and agent orchestration score higher.
+      weight: 0.15
+
+output:
+  filename_prefix: "your-event-name"
